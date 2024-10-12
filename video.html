@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="lib/hl-gen.js"></script>
+    <title>Cubist Circles</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        #canvasContainer {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+        }
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvasContainer">
+        <canvas id="imageCanvas"></canvas>
+    </div>
+
+    <script>
+        // Array of image URLs
+        const images = [
+            'https://arweave.net/3ilrbrMKYlzDKyG1IJNPLjrCyX2p3hdhSLL0zWxXleE',
+            'https://arweave.net/JVOwDB_8C3iXmk1MTn7WE1Ke8V7UhuRZupk5gn-NpP8',
+            'https://arweave.net/37CGONQOqHJp_pw3VyLcoQucmIt5DCADipQNOvenQBU',
+            'https://arweave.net/JmWxYIWK9c4PKQdvAK62uqFX3QtDLwRdSxMGHe4Gsww',
+            'https://arweave.net/IILePvPKpetDZzsCOcOTlVCn9C8yas9PqtMd0ouhYBs',
+            'https://arweave.net/gfb9YnaHvd3efrFh_udLZJga5XV5-zUKkHU1nCb3afI',
+            'https://arweave.net/r7lofAt75z-Dc-RGOSOBbvPXzZOJL4yTiyrCw_zYu9k',
+            'https://arweave.net/-D7RpVBMHhMTsEf3lu_qFluMYsHWa6CDPG1mq4SF9uM',
+            'https://arweave.net/EU47Hv03oSRR0zRbRgIIQLb256mnwVyX2nUuYrIIAHY',
+            'https://arweave.net/HR6HvF3v29zd2c9zfR41RMznysHxXDA8FMIqXlRq5Ho',
+            'https://arweave.net/I59Rbxm3ikzFT2c9iuzykZv8z_4RoI6iLVLF8OtZ9zE',
+            'https://arweave.net/kBxX2MMs_OWEux5yxpeA7ND0JT55gn_ZBu1V-TF8O6A',
+            'https://arweave.net/LIYgFJxe6qYBpHez8RCqJW-oJACrfoEQfJB61pDAdCo',
+            'https://arweave.net/LWLLe-XKRhPfe7drJjvW_36X5Fa6cnOJi3KLJhElpwg',
+            'https://arweave.net/ixr2JzmIYELp0_SJLDo6-bzmf3_uKboCstg02rpR6KE',
+            'https://arweave.net/uv8sHRwNkeZHxADW_ukUkAgBUYSKGQD2q3Wd_Y_tVrU',
+            'https://arweave.net/ZvJsAUXGTVat4BUJl4tJfBwzAluf9g5JsTreeLlMMIY',
+            'https://arweave.net/EHiHwAgpbp7wHKKjYSRuUN3dEG8j7RZkb5_7DNbiSDE',
+            'https://arweave.net/EuXmctKF_Fzjqd6RjNP6CJSBVwvh2ZMA6sPtV994dxw',
+            'https://arweave.net/rLDU-nidjPcB8n1JzWxC0-fXjY5NyYFTk_GF0qW0Oro',
+            'https://arweave.net/dzd5yRX78dlMlyEsNfXNgirYkEOIbJPblRDJm29Yfc8',
+            'https://arweave.net/ze2lFdF3NOOC4XOWrTjG0SKQ0eT42fNz8xq-wPrdrOU',
+            'https://arweave.net/l80wCgduoLQ5paJH6FYmJ-1JM1stHf2ns8cipmIrWSQ',
+            'https://arweave.net/OdY8o_FtuShQUdARrs8CWLzaOvceiYy_QxKNfUzb32s',
+            'https://arweave.net/iPrpFMPoCBdul7-8757lt4WUij3grZMJw8xdovc4OSU',
+            'https://arweave.net/u-aPbwzwagP8y3m1xE8DTXJh4142626Nct4LCr04gtk',
+            'https://arweave.net/jF89fwFC94ZXLs0w0-D322FgSuXpOgjwhOgK5DDDdvg',
+            'https://arweave.net/2B00qmD2IwnlBKbw0ru804cwoAMMNA8-bULd0DR6hOQ',
+            'https://arweave.net/vO_EQU93Hb6m3dza8yYZXd_GkNH3xSjqx7JyLql6JYI',
+            'https://arweave.net/37CGONQOqHJp_pw3VyLcoQucmIt5DCADipQNOvenQBU',
+            'https://arweave.net/XcvEJ-awSntkkvNmu1p_ip0QsUQeoU_wUBR7euhAu5M',
+            'https://arweave.net/AiEjhvXf9StyALTx1GrcgyslmXwvtMCGiFB9ye0W8mk',
+            'https://arweave.net/v-HQ2x3w-ab5E277wNMWrXNUNlrKxrylGBvDREKQQig'
+        ];
+
+        let currentImageIndex = 0;
+
+        function drawImageAndCircle(image, x, y, radius) {
+            const canvas = document.getElementById('imageCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // Set canvas size to match the image
+            canvas.width = image.width;
+            canvas.height = image.height;
+
+            // Draw the full image as background with lowered opacity
+            ctx.globalAlpha = 0.2;
+            ctx.drawImage(image, 0, 0);
+            ctx.globalAlpha = 1.0;
+
+            // Draw the full opacity circle
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2, true);
+            ctx.clip();
+            ctx.drawImage(image, 0, 0);
+            ctx.restore();
+
+            // Draw the circle outline
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2, true);
+            ctx.lineWidth = 50;
+            ctx.strokeStyle = 'rgba(0, 0, 0, 1.0)';
+            ctx.stroke();
+        }
+
+        function cycleImages() {
+            const xRandom = hl.randomInt(100);
+            const yRandom = hl.randomInt(100);
+            const rRandom = hl.randomInt(10);
+            const image = images[currentImageIndex];
+
+            hl.token.setTraits({
+                x: xRandom,
+                y: yRandom,
+                radius: rRandom,
+                Artist: 'Gabe Weis'
+            });
+
+            hl.token.setName(`Cubist Circle ${hl.token.id}`);
+            hl.token.setDescription(`A collection of cubist circles with original art by Gabe Weis and generative code by yungwknd`);
+
+            const img = new Image();
+            img.onload = function() {
+                const maxRadius = Math.min(img.width, img.height) / 4;             
+                const radius = Math.floor(rRandom / 100 * maxRadius) + maxRadius / 2;
+
+                const x = Math.floor(xRandom / 100 * (img.width - radius * 2)) + radius;
+                const y = Math.floor(yRandom / 100 * (img.height - radius * 2)) + radius;
+
+                drawImageAndCircle(img, x, y, radius);
+            };
+            img.src = image;
+
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+        }
+
+        window.onload = function() {
+            cycleImages(); // Initial call
+            setInterval(cycleImages, 1000); // Cycle every 1 second
+        };
+    </script>
+</body>
+</html>
