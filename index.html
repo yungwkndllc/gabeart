@@ -102,6 +102,12 @@
             const rRandom = hl.randomInt(10);
             const image = hl.randomElement(images);
 
+            hl.token.setTraits({
+                x: xRandom,
+                y: yRandom,
+                radius: rRandom,
+            });
+
             const img = new Image();
             img.onload = function() {
                 const maxRadius = Math.min(img.width, img.height) / 4;             
