@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="lib/hl-gen.js"></script>
-    <title>Gabe Circle</title>
+    <title>Cubist Circles</title>
     <style>
         body, html {
             margin: 0;
@@ -106,7 +106,11 @@
                 x: xRandom,
                 y: yRandom,
                 radius: rRandom,
+                Artist: 'Gabe Weis'
             });
+
+            hl.token.setName(`Cubist Circle ${hl.token.id}`);
+            hl.token.setDescription(`A collection of cubist circles with original art by Gabe Weis and generative code by yungwknd`);
 
             const img = new Image();
             img.onload = function() {
