@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="lib/hl-gen.js"></script>
     <title>Gabe Circle</title>
     <style>
         body, html {
@@ -40,6 +41,32 @@
             './5.png',
             './6.png',
             './7.png',
+            './8.png',
+            './9.png',
+            './10.png',
+            './11.png',
+            './12.png',
+            './13.png',
+            './14.png',
+            './15.png',
+            './16.png',
+            './17.png',
+            './18.png',
+            './19.png',
+            './20.png',
+            './21.png',
+            './22.png',
+            './23.png',
+            './24.png',
+            './25.png',
+            './26.png',
+            './27.png',
+            './28.png',
+            './29.png',
+            './30.png',
+            './31.png',
+            './32.png',
+            './33.png',
         ];
 
 
@@ -69,24 +96,22 @@
         }
 
         window.onload = function() {
-            const queryParams = new URLSearchParams(window.location.search);
-            const xFromParam = queryParams.get('x') || Math.floor(Math.random() * 100);
-            const yFromParam = queryParams.get('y') || Math.floor(Math.random() * 100);
-            const radiusFromParam = queryParams.get('r') || Math.floor(Math.random() * 100);
-            const imageFromParam = queryParams.get('i') || Math.floor(Math.random() * images.length);
+            const xRandom = hl.randomInt(100);
+            const yRandom = hl.randomInt(100);
+            const rRandom = hl.randomInt(10);
+            const image = hl.randomElement(images);
 
-            const randomImageUrl = images[parseInt(imageFromParam)];
             const img = new Image();
             img.onload = function() {
                 const maxRadius = Math.min(img.width, img.height) / 4;             
-                const radius = Math.floor(parseInt(radiusFromParam) / 100 * maxRadius) + maxRadius;
+                const radius = Math.floor(rRandom / 100 * maxRadius) + maxRadius;
 
-                const x = Math.floor(parseInt(xFromParam) / 100 * (img.width - radius * 2)) + radius;
-                const y = Math.floor(parseInt(yFromParam) / 100 * (img.height - radius * 2)) + radius;
+                const x = Math.floor(xRandom / 100 * (img.width - radius * 2)) + radius;
+                const y = Math.floor(yRandom/ 100 * (img.height - radius * 2)) + radius;
 
                 cutCircle(img, x, y, radius);
             };
-            img.src = randomImageUrl;
+            img.src = image;
         };
     </script>
 </body>
